@@ -1,24 +1,26 @@
-DEBUG=true
+DEBUG=false
 LDFLAGS=
-CFLAGS=
+CFLAGS=-Wall 
 
 ifeq ($(DEBUG),true)
 LDFLAGS+=-g
-CFLAGS+=-g
+CFLAGS+=-g -Og
+else
+CFLAGS+= -O2
 endif
 
 ifeq ($(OS),Windows_NT)
-CFLAGS=-D_INC_TCHAR
+CFLAGS+=-D_INC_TCHAR
 LDFLAGS+=-liconv
 endif
 
-all: fathuman
+all: dis68k
 
-fathuman: main.o fatfs/ff.o fatfs/option/cc932.o
+dis68k: dis68k_main.o dis68k_io.o fatfs/ff.o fatfs/option/cc932.o
 	gcc $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
 	gcc -c $< -o $@ $(CFLAGS)
 
 clean:
-	rm -f fathuman *.o fatfs/*.o fatfs/option/*.o
+	rm -f dis68k *.o fatfs/*.o fatfs/option/*.o
