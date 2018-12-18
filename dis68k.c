@@ -1,7 +1,9 @@
 #include <dirent.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <libgen.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -160,6 +162,10 @@ dis68k_status dis68k_list(dis68k_fs* fs, dis68k_fileentry** flp) {
   return DIS68K_OK;
 }
 
+#ifndef _WIN32
+#define mkdir(D) mkdir(D, S_IRWXU | S_IRWXG | S_IRWXO)
+#endif
+
 dis68k_status dis68k_extract(dis68k_fs* fs, dis68k_extract_info* hints) {
   dis68k_fileentry* list = NULL;
 
@@ -169,13 +175,13 @@ dis68k_status dis68k_extract(dis68k_fs* fs, dis68k_extract_info* hints) {
   }
 
   char oldwd[DIS68K_MAX_PATH_SIZE];
-  (void*)getcwd(oldwd, DIS68K_MAX_PATH_SIZE);
+  (void)getcwd(oldwd, DIS68K_MAX_PATH_SIZE);
   if (chdir(hints->dst_path) < 0) {
     /* XXX handle errno */
   }
 
   char oldroot[DIS68K_MAX_PATH_SIZE];
-  (void*)getcwd(oldroot, DIS68K_MAX_PATH_SIZE);
+  (void)getcwd(oldroot, DIS68K_MAX_PATH_SIZE);
 
   // traverse the disk image filesystem tree
   DIS68K_ERR_WRAP(dis68k_list(fs, &list));
@@ -243,6 +249,10 @@ dis68k_status dis68k_extract(dis68k_fs* fs, dis68k_extract_info* hints) {
 
   return dis68k_free_filelist(list);
 }
+
+#ifndef _WIN32
+#undef mkdir
+#endif
 
 #ifdef _WIN32
 #define lstat stat
@@ -353,7 +363,7 @@ dis68k_status dis68k_pack(dis68k_fs* fs, dis68k_pack_info* hints) {
       char* dst_path =
           src_path + sizeof(char) * (strlen(root_frame.dir_name) + 1);
 
-      srcfd = open(src_path, O_RDONLY | O_BINARY, 0);
+      srcfd = open(src_path, O_RDONLY, 0);
       printf("Packing %s... ", dst_path);
       DIS68K_ERR_WRAP(f_open(&dstfd, dst_path, FA_WRITE | FA_CREATE_ALWAYS));
       do {
@@ -413,6 +423,11 @@ dis68k_status dis68k_open_fs(dis68k_fs* fs, const char* path,
 
   return DIS68K_OK;
 }
+
+#ifdef _WIN32
+#undef lstat
+#undef S_ISLNK
+#endif
 
 dis68k_status dis68k_close_fs(dis68k_fs* fs) {
   fclose(fs->fp);
