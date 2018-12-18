@@ -8,6 +8,7 @@
 /*-----------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
 #include "dis68k_io.h"
