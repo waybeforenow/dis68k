@@ -1,0 +1,28 @@
+This directory contains various blank image files that may be useful for
+debugging or extending the functionality of `dis68k`. These files were generated
+using XM6 Pro-68k. For more information about that program, you can visit:
+
+http://mijet.eludevisibility.org/XM6%20Pro-68k/XM6%20Pro-68k.html
+
+----
+
+The directory format is:
+
+  DIM/ -- Contains DIM (floppy disk) image files.
+    2HC.DIM
+    2HD.DIM
+    2HDA.DIM
+    2HDE.DIM
+    2HQ.DIM
+    2HS.DIM -- Blank DIM image files formatted according to the floppy disk type
+    specified in the filename.
+
+  HDF/ -- Contains HDF (SXSI hard drive) image files.
+    HD.HDF -- A blank 10MB HDF image file.
+
+  HDS/ -- Contains HDS (SCSI hard drive) image files.
+    HD.HDF -- A blank 10MB HDS image file.
+
+  XDF/ -- Contains XDF (floppy disk) image files.
+    2HD.HDF -- A blank, 2HD-formatted XDF image file.
+
