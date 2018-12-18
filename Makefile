@@ -4,7 +4,7 @@ CFLAGS=-Wall
 
 ifeq ($(DEBUG),true)
 LDFLAGS+=-g
-CFLAGS+=-g -Og
+CFLAGS+=-D_DEBUG -g -Og 
 else
 CFLAGS+= -O2
 endif
@@ -16,7 +16,8 @@ endif
 
 all: dis68k
 
-dis68k: dis68k_main.o dis68k_io.o fatfs/ff.o fatfs/option/cc932.o
+dis68k: dis68k.o dis68k_io.o dis68k_logging.o dis68k_main.o fatfs/ff.o \
+	      fatfs/option/cc932.o
 	gcc $^ -o $@ $(LDFLAGS)
 
 %.o: %.c

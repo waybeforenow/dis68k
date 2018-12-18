@@ -642,7 +642,7 @@ void unlock_fs (
 
 static
 FRESULT chk_lock (	/* Check if the file can be accessed */
-	DIR* dp,		/* Directory object pointing the file to be checked */
+	F_DIR* dp,		/* Directory object pointing the file to be checked */
 	int acc			/* Desired access type (0:Read, 1:Write, 2:Delete/Rename) */
 )
 {
@@ -678,7 +678,7 @@ int enq_lock (void)	/* Check if an entry is available for a new object */
 
 static
 UINT inc_lock (	/* Increment object open counter and returns its index (0:Internal error) */
-	DIR* dp,	/* Directory object pointing the file to register or increment */
+	F_DIR* dp,	/* Directory object pointing the file to register or increment */
 	int acc		/* Desired access (0:Read, 1:Write, 2:Delete/Rename) */
 )
 {
@@ -1115,7 +1115,7 @@ DWORD clmt_clust (	/* <2:Error, >=2:Cluster number */
 
 static
 FRESULT dir_sdi (
-	DIR* dp,		/* Pointer to directory object */
+	F_DIR* dp,		/* Pointer to directory object */
 	UINT idx		/* Index of directory table */
 )
 {
@@ -1163,7 +1163,7 @@ FRESULT dir_sdi (
 
 static
 FRESULT dir_next (	/* FR_OK:Succeeded, FR_NO_FILE:End of table, FR_DENIED:Could not stretch */
-	DIR* dp,		/* Pointer to the directory object */
+	F_DIR* dp,		/* Pointer to the directory object */
 	int stretch		/* 0: Do not stretch table, 1: Stretch table if needed */
 )
 {
@@ -1232,7 +1232,7 @@ FRESULT dir_next (	/* FR_OK:Succeeded, FR_NO_FILE:End of table, FR_DENIED:Could 
 #if !_FS_READONLY
 static
 FRESULT dir_alloc (
-	DIR* dp,	/* Pointer to the directory object */
+	F_DIR* dp,	/* Pointer to the directory object */
 	UINT nent	/* Number of contiguous entries to allocate (1-21) */
 )
 {
@@ -1488,7 +1488,7 @@ BYTE sum_sfn (
 
 static
 FRESULT dir_find (
-	DIR* dp			/* Pointer to the directory object linked to the file name */
+	F_DIR* dp			/* Pointer to the directory object linked to the file name */
 )
 {
 	FRESULT res;
@@ -1557,7 +1557,7 @@ FRESULT dir_find (
 #if _FS_MINIMIZE <= 1 || _USE_LABEL || _FS_RPATH >= 2
 static
 FRESULT dir_read (
-	DIR* dp,		/* Pointer to the directory object */
+	F_DIR* dp,		/* Pointer to the directory object */
 	int vol			/* Filtered by 0:file/directory or 1:volume label */
 )
 {
@@ -1616,7 +1616,7 @@ FRESULT dir_read (
 #if !_FS_READONLY
 static
 FRESULT dir_register (	/* FR_OK:Successful, FR_DENIED:No free entry or too many SFN collision, FR_DISK_ERR:Disk error */
-	DIR* dp				/* Target directory with object name to be created */
+	F_DIR* dp				/* Target directory with object name to be created */
 )
 {
 	FRESULT res;
@@ -1694,7 +1694,7 @@ FRESULT dir_register (	/* FR_OK:Successful, FR_DENIED:No free entry or too many 
 #if !_FS_READONLY && !_FS_MINIMIZE
 static
 FRESULT dir_remove (	/* FR_OK: Successful, FR_DISK_ERR: A disk error */
-	DIR* dp				/* Directory object pointing the entry to be removed */
+	F_DIR* dp				/* Directory object pointing the entry to be removed */
 )
 {
 	FRESULT res;
@@ -1741,7 +1741,7 @@ FRESULT dir_remove (	/* FR_OK: Successful, FR_DISK_ERR: A disk error */
 #if _FS_MINIMIZE <= 1 || _FS_RPATH >= 2
 static
 void get_fileinfo (		/* No return code */
-	DIR* dp,			/* Pointer to the directory object */
+	F_DIR* dp,			/* Pointer to the directory object */
 	FILINFO* fno	 	/* Pointer to the file information to be filled */
 )
 {
@@ -1811,7 +1811,7 @@ void get_fileinfo (		/* No return code */
 
 static
 FRESULT create_name (
-	DIR* dp,			/* Pointer to the directory object */
+	F_DIR* dp,			/* Pointer to the directory object */
 	const TCHAR** path	/* Pointer to pointer to the segment in the path string */
 )
 {
@@ -2021,7 +2021,7 @@ FRESULT create_name (
 
 static
 FRESULT follow_path (	/* FR_OK(0): successful, !=0: error code */
-	DIR* dp,			/* Directory object to return last directory and found object */
+	F_DIR* dp,			/* Directory object to return last directory and found object */
 	const TCHAR* path	/* Full-path string to find a file or directory */
 )
 {
@@ -2431,7 +2431,7 @@ FRESULT f_open (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	BYTE *dir;
 	DEF_NAMEBUF;
 
@@ -2892,7 +2892,7 @@ FRESULT f_chdir (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	DEF_NAMEBUF;
 
 
@@ -2926,7 +2926,7 @@ FRESULT f_getcwd (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	UINT i, n;
 	DWORD ccl;
 	TCHAR *tp;
@@ -3162,7 +3162,7 @@ FRESULT f_lseek (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_opendir (
-	DIR* dp,			/* Pointer to directory object to create */
+	F_DIR* dp,			/* Pointer to directory object to create */
 	const TCHAR* path	/* Pointer to the directory path */
 )
 {
@@ -3218,7 +3218,7 @@ FRESULT f_opendir (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_closedir (
-	DIR *dp		/* Pointer to the directory object to be closed */
+	F_DIR *dp		/* Pointer to the directory object to be closed */
 )
 {
 	FRESULT res;
@@ -3250,7 +3250,7 @@ FRESULT f_closedir (
 /*-----------------------------------------------------------------------*/
 
 FRESULT f_readdir (
-	DIR* dp,			/* Pointer to the open directory object */
+	F_DIR* dp,			/* Pointer to the open directory object */
 	FILINFO* fno		/* Pointer to file information to return */
 )
 {
@@ -3297,7 +3297,7 @@ FRESULT f_stat (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	DEF_NAMEBUF;
 
 
@@ -3454,7 +3454,7 @@ FRESULT f_unlink (
 )
 {
 	FRESULT res;
-	DIR dj, sdj;
+	F_DIR dj, sdj;
 	BYTE *dir;
 	DWORD dclst;
 	DEF_NAMEBUF;
@@ -3483,7 +3483,7 @@ FRESULT f_unlink (
 				if (dclst < 2) {
 					res = FR_INT_ERR;
 				} else {
-					mem_cpy(&sdj, &dj, sizeof (DIR));	/* Check if the sub-directory is empty or not */
+					mem_cpy(&sdj, &dj, sizeof (F_DIR));	/* Check if the sub-directory is empty or not */
 					sdj.sclust = dclst;
 					res = dir_sdi(&sdj, 2);		/* Exclude dot entries */
 					if (res == FR_OK) {
@@ -3524,7 +3524,7 @@ FRESULT f_mkdir (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	BYTE *dir, n;
 	DWORD dsc, dcl, pcl, tm = get_fattime();
 	DEF_NAMEBUF;
@@ -3600,7 +3600,7 @@ FRESULT f_chmod (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	BYTE *dir;
 	DEF_NAMEBUF;
 
@@ -3642,7 +3642,7 @@ FRESULT f_utime (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	BYTE *dir;
 	DEF_NAMEBUF;
 
@@ -3684,7 +3684,7 @@ FRESULT f_rename (
 )
 {
 	FRESULT res;
-	DIR djo, djn;
+	F_DIR djo, djn;
 	BYTE buf[21], *dir;
 	DWORD dw;
 	DEF_NAMEBUF;
@@ -3706,7 +3706,7 @@ FRESULT f_rename (
 				res = FR_NO_FILE;
 			} else {
 				mem_cpy(buf, djo.dir+DIR_Attr, 21);		/* Save the object information except name */
-				mem_cpy(&djn, &djo, sizeof (DIR));		/* Duplicate the directory object */
+				mem_cpy(&djn, &djo, sizeof (F_DIR));		/* Duplicate the directory object */
 				if (get_ldnumber(&path_new) >= 0)		/* Snip drive number off and ignore it */
 					res = follow_path(&djn, path_new);	/* and check if new object is exist */
 				else
@@ -3769,7 +3769,7 @@ FRESULT f_getlabel (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	UINT i, j;
 
 
@@ -3832,7 +3832,7 @@ FRESULT f_setlabel (
 )
 {
 	FRESULT res;
-	DIR dj;
+	F_DIR dj;
 	BYTE vn[11];
 	UINT i, j, sl;
 	WCHAR w;

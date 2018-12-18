@@ -1,5 +1,5 @@
-#ifndef _DIS68K_TUNING_H
-#define _DIS68K_TUNING_H
+#ifndef __DIS68K_TUNING_H
+#define __DIS68K_TUNING_H
 
 #ifndef DIS68K_NATIVE_ENCODING
 #define DIS68K_NATIVE_ENCODING "UTF-8"
@@ -17,4 +17,4 @@
 #endif
 #endif
 
-#endif  // _DIS68K_TUNING_H
+#endif  // __DIS68K_TUNING_H
