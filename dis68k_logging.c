@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 #include "dis68k_logging.h"
-#include "fatfs/ff.h"
+#include "lib/fatfs/ff.h"
 
 dis68k_verbosity dis68k_global_loglevel = DIS68K_LEVEL_ERROR |
                                           DIS68K_LEVEL_WARN | DIS68K_LEVEL_INFO

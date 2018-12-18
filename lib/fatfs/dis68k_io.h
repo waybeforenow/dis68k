@@ -1,18 +1,13 @@
-#ifndef __DIS68K_IO_H
-#define __DIS68K_IO_H
+#ifndef __FATFS_DIS68K_IO_H
+#define __FATFS_DIS68K_IO_H
 
-#include "fatfs/diskio.h"
-#include "fatfs/ff.h"
+#include "../../dis68k.h"
+#include "../../dis68k_logging.h"
+#include "diskio.h"
+#include "ff.h"
 
 #define DIS68K_SECTOR_SIZE _MIN_SS
 #define DIS68K_DIFC_HEADER_SIZE 0x100
-
-DSTATUS disk_initialize(BYTE pdrv);
-DSTATUS disk_status(BYTE pdrv);
-DRESULT disk_read(BYTE pdrv, BYTE *buff, DWORD sector, UINT count);
-DRESULT disk_write(BYTE pdrv, const BYTE *buff, DWORD sector, UINT count);
-DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff);
-DWORD get_fattime(void);
 
 static BYTE fake_bootsect[1024] = {
     0x60, 0x3C, 0x90, 0x58, 0x36, 0x38, 0x49, 0x50, /* `< X68IP */
@@ -145,4 +140,4 @@ static BYTE fake_bootsect[1024] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* ........ */
 };
 
-#endif  // __DIS68K_IO_H
+#endif  // __FATFS_DIS68K_IO_H

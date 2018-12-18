@@ -7,8 +7,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "fatfs/diskio.h"
-#include "fatfs/ff.h"
+#include "lib/fatfs/diskio.h"
+#include "lib/fatfs/ff.h"
 
 #include "dis68k.h"
 #include "dis68k_logging.h"

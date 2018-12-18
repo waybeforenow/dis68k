@@ -17,10 +17,6 @@
 #ifndef _FATFS
 #define _FATFS 8051 /* Revision ID */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "ffconf.h"  /* FatFs configuration options */
 #include "integer.h" /* Basic integer types */
 
@@ -339,10 +335,6 @@ int ff_del_syncobj(_SYNC_t sobj);            /* Delete a sync object */
   *((BYTE*)(ptr) + 1) = (BYTE)((WORD)(val) >> 8);   \
   *((BYTE*)(ptr) + 2) = (BYTE)((DWORD)(val) >> 16); \
   *((BYTE*)(ptr) + 3) = (BYTE)((DWORD)(val) >> 24)
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif /* _FATFS */

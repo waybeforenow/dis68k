@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include "fatfs/diskio.h"
-#include "fatfs/ff.h"
+#include "lib/fatfs/diskio.h"
+#include "lib/fatfs/ff.h"
 
 typedef int8_t dis68k_status;
 #define DIS68K_OK 0
