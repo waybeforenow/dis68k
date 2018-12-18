@@ -1,6 +1,7 @@
 DEBUG=false
 LDFLAGS=
 CFLAGS=-Wall 
+CC=gcc
 
 ifeq ($(DEBUG),true)
 LDFLAGS+=-g
@@ -11,17 +12,16 @@ endif
 
 ifeq ($(OS),Windows_NT)
 CFLAGS+=-D_INC_TCHAR
-LDFLAGS+=-liconv
 endif
 
 all: dis68k
 
 dis68k: dis68k.o dis68k_io.o dis68k_logging.o dis68k_main.o fatfs/ff.o \
 	      fatfs/option/cc932.o
-	gcc $^ -o $@ $(LDFLAGS)
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
-	gcc -c $< -o $@ $(CFLAGS)
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 clean:
 	rm -f dis68k *.o fatfs/*.o fatfs/option/*.o
