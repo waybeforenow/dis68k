@@ -1,0 +1,3 @@
+[submodule "lib/libfat-human68k"]
+	path = lib/libfat-human68k
+	url = https://github.com/waybeforenow/libfat-human68k

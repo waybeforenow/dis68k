@@ -5,8 +5,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "lib/fatfs/diskio.h"
-#include "lib/fatfs/ff.h"
+#include "lib/libfat-human68k/diskio.h"
+#include "lib/libfat-human68k/ff.h"
 
 #include "dis68k.h"
 #include "dis68k_logging.h"
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     return 1;
   }
 
-  dis68k_fs fs = {0};
+  human68k_fs fs = {0};
   if (dis68k_open_fs(&fs, (opcode == DIS68K_PACK) ? argv[3] : argv[2],
                      (opcode == DIS68K_PACK) != DIS68K_OK)) {
     DIS68K_LOGF_ERROR("Couldn't mount %s as a DIM/XDF image.", argv[2]);

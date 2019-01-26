@@ -7,8 +7,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "lib/fatfs/diskio.h"
-#include "lib/fatfs/ff.h"
+#include "lib/libfat-human68k/diskio.h"
+#include "lib/libfat-human68k/ff.h"
 
 #include "dis68k.h"
 #include "dis68k_logging.h"
@@ -34,7 +34,7 @@ void* dis68k_malloc(dis68k_status* s, dis68k_bool zero, size_t t, size_t size) {
   return ret;
 }
 
-dis68k_status dis68k_list(dis68k_fs* fs, dis68k_fileentry** flp) {
+dis68k_status dis68k_list(human68k_fs* fs, dis68k_fileentry** flp) {
   FRESULT res;
   FILINFO fno = {0};
   F_DIR dir;
@@ -46,7 +46,7 @@ dis68k_status dis68k_list(dis68k_fs* fs, dis68k_fileentry** flp) {
   dis68k_fileentry* last;
   *flp = NULL;
 
-  if (fs->hints & DIS68K_FS_USE_LFN) {
+  if (fs->hints & FS_USE_LFN) {
     char lfn[DIS68K_MAX_PATH_SIZE + 1]; /* Buffer to store the LFN */
     fno.lfname = lfn;
     fno.lfsize = DIS68K_MAX_PATH_SIZE + 1;
@@ -95,7 +95,7 @@ dis68k_status dis68k_list(dis68k_fs* fs, dis68k_fileentry** flp) {
         break;
       }
 
-      if (fs->hints & DIS68K_FS_USE_LFN) {
+      if (fs->hints & FS_USE_LFN) {
         path = *fno.lfname ? fno.lfname : fno.fname;
       } else {
         path = fno.fname;
@@ -166,7 +166,7 @@ dis68k_status dis68k_list(dis68k_fs* fs, dis68k_fileentry** flp) {
 #define mkdir(D) mkdir(D, S_IRWXU | S_IRWXG | S_IRWXO)
 #endif
 
-dis68k_status dis68k_extract(dis68k_fs* fs, dis68k_extract_info* hints) {
+dis68k_status dis68k_extract(human68k_fs* fs, dis68k_extract_info* hints) {
   dis68k_fileentry* list = NULL;
 
   // create the dst_path directory
@@ -259,7 +259,7 @@ dis68k_status dis68k_extract(dis68k_fs* fs, dis68k_extract_info* hints) {
 #define S_ISLNK(fx) 0 && fx
 #endif
 
-dis68k_status dis68k_pack(dis68k_fs* fs, dis68k_pack_info* hints) {
+dis68k_status dis68k_pack(human68k_fs* fs, dis68k_pack_info* hints) {
   struct dirent* de;
   struct stat st;
   dis68k__dir_frame root_frame = {hints->src_path, NULL, 0, NULL};
@@ -329,8 +329,7 @@ dis68k_status dis68k_pack(dis68k_fs* fs, dis68k_pack_info* hints) {
       }
 
       /* only follow symlinks if specified */
-      if (S_ISLNK(st.st_mode) && !(fs->hints & DIS68K_FS_FOLLOW_SYMLINKS))
-        continue;
+      if (S_ISLNK(st.st_mode) && !(fs->hints & FS_FOLLOW_SYMLINKS)) continue;
 
       /* recursively follow dirs */
       if (S_ISDIR(st.st_mode)) {
@@ -380,7 +379,7 @@ dis68k_status dis68k_pack(dis68k_fs* fs, dis68k_pack_info* hints) {
   return DIS68K_OK;
 }
 
-dis68k_status dis68k_open_fs(dis68k_fs* fs, const char* path,
+dis68k_status dis68k_open_fs(human68k_fs* fs, const char* path,
                              dis68k_bool write) {
   fs->fp = fopen(path, (write) ? "wb" : "rb");
   if (!fs->fp) {
@@ -389,12 +388,12 @@ dis68k_status dis68k_open_fs(dis68k_fs* fs, const char* path,
   }
 
   fs->fs = (FATFS*)dis68k_malloc(NULL, 1, 1, sizeof(FATFS));
-  fs->hints |= DIS68K_FS_REPLACE_SECTOR0;
+  fs->hints |= FS_REPLACE_SECTOR0;
   if (!write) {
     char dim_head[256];
     fread(dim_head, 256, 1, fs->fp);
     if (!strncmp(dim_head + 0xab, "DIFC HEADER", 11)) {
-      fs->hints |= DIS68K_FS_HAS_DIFC_HEADER;
+      fs->hints |= FS_HAS_DIFC_HEADER;
     }
   }
 
@@ -410,8 +409,8 @@ dis68k_status dis68k_open_fs(dis68k_fs* fs, const char* path,
   strncpy(bn_copy, bn, bn_len - 1);
   fs->basename = bn_copy;
 
-  extern dis68k_fs* dis68k_global_fs;
-  dis68k_global_fs = fs;
+  extern human68k_fs* human68k_global_fs;
+  human68k_global_fs = fs;
 
   DIS68K_ERR_WRAP(f_mount(fs->fs, "", 1));
   if (write) {
@@ -429,7 +428,7 @@ dis68k_status dis68k_open_fs(dis68k_fs* fs, const char* path,
 #undef S_ISLNK
 #endif
 
-dis68k_status dis68k_close_fs(dis68k_fs* fs) {
+dis68k_status dis68k_close_fs(human68k_fs* fs) {
   fclose(fs->fp);
   DIS68K_ERR_WRAP(f_mount(NULL, "", 0));
   free(fs->info.label);

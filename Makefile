@@ -19,19 +19,19 @@ endif
 all: dis68k doc
 
 clean:
-	+$(MAKE) -C lib/fatfs clean
+	+$(MAKE) -C lib/libfat-human68k clean
 	rm -f dis68k dis68k.1 *.o
 
 doc: dis68k.1
 
-dis68k: dis68k.o dis68k_logging.o dis68k_main.o lib/fatfs/fatfs_dis68k.a
+dis68k: dis68k.o dis68k_logging.o dis68k_main.o lib/libfat-human68k/libfat-human68k.a
 	$(CC) $^ -o $@
 
 %.o: %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-lib/fatfs/fatfs_dis68k.a:
-	+$(MAKE) -C lib/fatfs fatfs_dis68k.a
+lib/libfat-human68k/libfat-human68k.a:
+	+$(MAKE) -C lib/libfat-human68k libfat-human68k.a
 
 dis68k.1: README.md
 	$(PANDOC) -s -t man $< -o $@

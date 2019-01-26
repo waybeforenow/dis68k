@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "lib/fatfs/ff.h"
+#include "lib/libfat-human68k/ff.h"
 
 #ifndef DIS68K_LOG_STREAM
 #define DIS68K_LOG_STREAM stderr
@@ -15,8 +15,6 @@ typedef uint8_t dis68k_verbosity;
 #define DIS68K_LEVEL_WARN 0x02
 #define DIS68K_LEVEL_INFO 0x04
 #define DIS68K_LEVEL_DEBUG 0x10
-
-const char* f_errstr(FRESULT r);
 
 /* FATAL log entries can't be masked, and cause an immediate program
  * termination. */
